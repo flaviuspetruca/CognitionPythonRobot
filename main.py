@@ -1,8 +1,10 @@
+from pynput import mouse
 import pyttsx3
 import time
 import keyboard
 from datetime import date, datetime, timedelta
 from pynput.keyboard import Key, Listener
+from pynput.mouse import Listener
 
 delta = timedelta(
     hours=0,
@@ -31,9 +33,10 @@ count_arrowRight = emptyValue
 count_arrowLeft = emptyValue
 count_arrowUP = emptyValue
 count_arrowDown = emptyValue
+count_space = emptyValue
 
-colorsItems = [("brown","potato"), ("orange", "orange"), ("light green","grapes"), ("dark green", "apple")]
-keys = [("up","potato"), ("down", "orange"), ("left", "grapes"), ("right", "apple")]
+colorsItems = [("red","apple"), ("orange", "orange"), ("yellow","banana"), ("green", "lime")]
+keys = [("up","apple"), ("down", "orange"), ("left", "banana"), ("right", "lime")]
 
 wantToListen = True
 
@@ -49,8 +52,9 @@ while(wantToListen):
         continue
            
 def resetValues():
-    global count_arrowUP,count_arrowDown, count_arrowRight, count_arrowLeft
-    count_arrowUP = count_arrowDown = count_arrowRight = count_arrowLeft = emptyValue
+    global count_arrowUP,count_arrowDown, count_arrowRight, count_arrowLeft, count_space
+    count_arrowUP = count_arrowDown = count_arrowRight = count_arrowLeft = count_space = emptyValue
+
 
 results = []
 
@@ -77,7 +81,7 @@ for color in colorsItems:
                     engineFast.runAndWait()
                     for k in keys:
                         if k[0] == "up":
-                            results.append((color[0], k[1] == color[1]))
+                            results.append((color[0], k[1] == color[1] and "True" or "Maybe you get it next time"))
                     break 
         elif keyboard.read_key() == "down" and count_arrowDown[0] != 2:
             time = datetime.now()
@@ -98,7 +102,7 @@ for color in colorsItems:
                     engineFast.runAndWait()
                     for k in keys:
                         if k[0] == "down":
-                            results.append((color[0], k[1] == color[1]))
+                            results.append((color[0], k[1] == color[1] and "True" or "Maybe you get it next time"))
                     break    
         elif keyboard.read_key() == "left" and count_arrowLeft[0] != 2:
             time = datetime.now()
@@ -119,7 +123,7 @@ for color in colorsItems:
                     engineFast.runAndWait()
                     for k in keys:
                         if k[0] == "left":
-                            results.append((color[0], k[1] == color[1]))
+                            results.append((color[0], k[1] == color[1] and "True" or "Maybe you get it next time"))
                     break  
         elif keyboard.read_key() == "right" and count_arrowRight[0] != 2:
             time = datetime.now()
@@ -140,10 +144,10 @@ for color in colorsItems:
                     engineFast.runAndWait()
                     for k in keys:
                         if k[0] == "right":
-                            results.append((color[0], k[1] == color[1]))
+                            results.append((color[0], k[1] == color[1] and "True" or "Maybe you get it next time"))
                     break
 for r in results:
-    engineFast.say("For {} you were {}".format(r[0],r[1]))
+    engineFast.say("For {} {}".format(r[0],r[1] == "True" and "you did Good" or r[1]))
     engineFast.runAndWait();
     
 # Open a file with access mode 'a'
